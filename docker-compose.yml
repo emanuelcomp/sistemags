@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Backend Flask
+  backend:
+    build: ./profissionais_backend
+    container_name: profissionais_backend
+    environment:
+      - DATABASE_URL=mysql+pymysql://syssu589_sistemags:CeuEPCKRgn_=++2@192.185.217.220:3306/syssu589_sistemags
+      - FLASK_ENV=production
+      - SECRET_KEY=sua_chave_secreta_muito_segura
+      - JWT_SECRET_KEY=sua_chave_jwt_secreta
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./profissionais_backend/src/database:/app/src/database
+    networks:
+      - profissionais_network
+
+  # Frontend React
+  frontend:
+    build: ./profissionais_frontend
+    container_name: profissionais_frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - profissionais_network
+
+networks:
+  profissionais_network:
+    driver: bridge
+
+
